@@ -4,6 +4,10 @@
         return;
     }
 
+    // ============================================================================
+    // FUNCIONES AUXILIARES
+    // ============================================================================
+
     // Función auxiliar para formatear actividades como lista HTML
     function formatearActividadesLista(actividades) {
         if (!actividades || actividades.trim() === '') return '';
@@ -173,8 +177,14 @@ fetch(urlCSV)
             skipEmptyLines: true,
             complete: function (results) {
                 const data = results.data.slice(1);
+                
+                // Debug: Mostrar encabezados y primeras filas
+                console.log("=== DEBUG CDC ===");
+                console.log("Encabezados:", results.data[0]);
+                console.log("Total de filas (sin encabezado):", data.length);
+                console.log("Primeras 3 filas:", data.slice(0, 3));
 
-                data.forEach(columnas => {
+                data.forEach((columnas, index) => {
                     const name = columnas[1]?.trim();
                     const tipo = columnas[2]?.trim();
                     const direc = columnas[3]?.trim();
@@ -188,6 +198,11 @@ fetch(urlCSV)
                     const linkFoto = columnas[11]?.trim();
                     const estado = columnas[12]?.trim();
                     const estadoNormalizado = estado || "Regular";
+
+                    // Debug: Mostrar problemas de coordenadas
+                    if (isNaN(lat) || isNaN(lng)) {
+                        console.log(`Fila ${index + 2}: ${name} - Coordenadas inválidas: lat=${columnas[4]}, lng=${columnas[5]}`);
+                    }
 
                     if (!isNaN(lat) && !isNaN(lng)) {
                         const icono = iconoCDC;
@@ -216,11 +231,11 @@ fetch(urlCSV)
                         // Extraer actividades de actGratis y actCosto
                         const actividades = [];
                         if (actGratis) {
-                            const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+                            const actividadesGratis = actGratis.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
                             actividades.push(...actividadesGratis);
                         }
                         if (actCosto) {
-                            const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+                            const actividadesCosto = actCosto.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
                             actividades.push(...actividadesCosto);
                         }
 
@@ -365,11 +380,11 @@ fetch(urlCSVModulos)
             // Extraer actividades de actGratis y actCosto
             const actividades = [];
             if (actGratis) {
-              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesGratis = actGratis.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividades.push(...actividadesGratis);
             }
             if (actCosto) {
-              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesCosto = actCosto.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividades.push(...actividadesCosto);
             }
 
@@ -603,11 +618,11 @@ fetch(urlCSVCACI)
             // Extraer actividades de actGratis y actCosto
             const actividadesCACI = [];
             if (actGratis) {
-              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesGratis = actGratis.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCACI.push(...actividadesGratis);
             }
             if (actCosto) {
-              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesCosto = actCosto.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCACI.push(...actividadesCosto);
             }
 
@@ -745,11 +760,11 @@ fetch(urlCSVCC)
             // Extraer actividades de actGratis y actCosto
             const actividadesCC = [];
             if (actGratis) {
-              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesGratis = actGratis.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCC.push(...actividadesGratis);
             }
             if (actCosto) {
-              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesCosto = actCosto.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCC.push(...actividadesCosto);
             }
 
@@ -970,11 +985,11 @@ fetch(urlCSV_CI)
             // Extraer actividades de actGratis y actCosto
             const actividadesCI = [];
             if (actGratis) {
-              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesGratis = actGratis.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCI.push(...actividadesGratis);
             }
             if (actCosto) {
-              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesCosto = actCosto.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCI.push(...actividadesCosto);
             }
 
@@ -1114,11 +1129,11 @@ fetch(urlCSV_CAM)
             // Extraer actividades de actGratis y actCosto
             const actividadesCAM = [];
             if (actGratis) {
-              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesGratis = actGratis.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCAM.push(...actividadesGratis);
             }
             if (actCosto) {
-              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesCosto = actCosto.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCAM.push(...actividadesCosto);
             }
 
@@ -1257,11 +1272,11 @@ fetch(urlCSV_CAO)
             // Extraer actividades de actGratis y actCosto
             const actividadesCAO = [];
             if (actGratis) {
-              const actividadesGratis = actGratis.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesGratis = actGratis.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCAO.push(...actividadesGratis);
             }
             if (actCosto) {
-              const actividadesCosto = actCosto.split(',').map(a => a.trim()).filter(a => a);
+              const actividadesCosto = actCosto.split(/[\n,]+/).map(a => a.trim()).filter(a => a);
               actividadesCAO.push(...actividadesCosto);
             }
 
@@ -1661,7 +1676,95 @@ checkboxEquipamientos.addEventListener("change", function() {
 });
 
 // ============================================================================
-// 🏥 CAPA: HOSPITALES
+// � SUBGRUPO: ESCUELAS (dentro de Equipamientos Urbanos)
+// ============================================================================
+
+// Crear subgrupo de Escuelas
+const subgrupoEscuelas = document.createElement("li");
+subgrupoEscuelas.style.marginBottom = "10px";
+subgrupoEscuelas.style.listStyle = "none";
+
+// Contenedor para la cabecera del subgrupo
+const headerEscuelas = document.createElement("div");
+headerEscuelas.style.display = "flex";
+headerEscuelas.style.alignItems = "center";
+headerEscuelas.style.marginBottom = "5px";
+
+// Icono desplegable del subgrupo
+const iconoToggleEscuelas = document.createElement("span");
+iconoToggleEscuelas.innerHTML = "▶";
+iconoToggleEscuelas.style.cursor = "pointer";
+iconoToggleEscuelas.style.marginRight = "8px";
+iconoToggleEscuelas.style.fontSize = "10px";
+iconoToggleEscuelas.style.transition = "transform 0.3s ease";
+iconoToggleEscuelas.style.display = "inline-block";
+iconoToggleEscuelas.style.width = "12px";
+iconoToggleEscuelas.style.flexShrink = "0";
+
+// Checkbox del subgrupo
+const checkboxEscuelas = document.createElement("input");
+checkboxEscuelas.type = "checkbox";
+checkboxEscuelas.id = "checkboxEscuelas";
+checkboxEscuelas.style.marginRight = "8px";
+checkboxEscuelas.style.flexShrink = "0";
+
+// Label del subgrupo
+const labelEscuelas = document.createElement("label");
+labelEscuelas.htmlFor = "checkboxEscuelas";
+labelEscuelas.style.cursor = "pointer";
+labelEscuelas.style.fontSize = "13px";
+labelEscuelas.style.fontWeight = "600";
+labelEscuelas.innerHTML = `🏫 Escuelas`;
+
+// Contenedor de escuelas (sublista)
+const listaEscuelas = document.createElement("ul");
+listaEscuelas.style.marginLeft = "20px";
+listaEscuelas.style.marginTop = "5px";
+listaEscuelas.style.display = "none";
+listaEscuelas.style.listStyle = "none";
+listaEscuelas.style.paddingLeft = "0";
+
+// Array para checkboxes de escuelas
+const checkboxesEscuelas = [];
+
+// Variable para controlar estado desplegado
+let isExpandedEscuelas = false;
+
+// Toggle del subgrupo
+iconoToggleEscuelas.addEventListener("click", function() {
+    isExpandedEscuelas = !isExpandedEscuelas;
+    listaEscuelas.style.display = isExpandedEscuelas ? "block" : "none";
+    iconoToggleEscuelas.style.transform = isExpandedEscuelas ? "rotate(90deg)" : "rotate(0deg)";
+});
+
+labelEscuelas.addEventListener("click", function(e) {
+    if (e.target === labelEscuelas) {
+        iconoToggleEscuelas.click();
+    }
+});
+
+// Función del checkbox del subgrupo
+checkboxEscuelas.addEventListener("change", function() {
+    if (this.checked && !isExpandedEscuelas) {
+        iconoToggleEscuelas.click();
+    }
+    checkboxesEscuelas.forEach(cb => {
+        if (cb.checked !== this.checked) {
+            cb.click();
+        }
+    });
+});
+
+// Ensamblar subgrupo
+headerEscuelas.appendChild(iconoToggleEscuelas);
+headerEscuelas.appendChild(checkboxEscuelas);
+headerEscuelas.appendChild(labelEscuelas);
+subgrupoEscuelas.appendChild(headerEscuelas);
+subgrupoEscuelas.appendChild(listaEscuelas);
+listaCapasEquipamientos.appendChild(subgrupoEscuelas);
+
+// ============================================================================
+// �🏥 CAPA: HOSPITALES
 // ============================================================================
 fetch("archivos/vectores/hospitales.geojson")
   .then(response => response.json())
@@ -2201,8 +2304,8 @@ fetch("archivos/vectores/preescolar.geojson")
 
     itemCapa.appendChild(checkbox);
     itemCapa.appendChild(label);
-    listaCapasEquipamientos.appendChild(itemCapa);
-    checkboxesEquipamientos.push(checkbox);
+    listaEscuelas.appendChild(itemCapa);
+    checkboxesEscuelas.push(checkbox);
   })
   .catch(error => console.error("Error al cargar Preescolar:", error));
 
@@ -2282,8 +2385,8 @@ fetch("archivos/vectores/primarias.geojson")
 
     itemCapa.appendChild(checkbox);
     itemCapa.appendChild(label);
-    listaCapasEquipamientos.appendChild(itemCapa);
-    checkboxesEquipamientos.push(checkbox);
+    listaEscuelas.appendChild(itemCapa);
+    checkboxesEscuelas.push(checkbox);
   })
   .catch(error => console.error("Error al cargar Primarias:", error));
 
@@ -2355,6 +2458,8 @@ fetch("archivos/vectores/secundarias.geojson")
     label.htmlFor = "checkboxSecundarias";
     label.style.marginLeft = "6px";
     label.style.cursor = "pointer";
+    label.style.display = "inline-flex";
+    label.style.alignItems = "center";
     label.innerHTML = `
       <span style="color: #555;">(${data.features.length})</span>
       <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">🎓</span>
@@ -2363,8 +2468,8 @@ fetch("archivos/vectores/secundarias.geojson")
 
     itemCapa.appendChild(checkbox);
     itemCapa.appendChild(label);
-    listaCapasEquipamientos.appendChild(itemCapa);
-    checkboxesEquipamientos.push(checkbox);
+    listaEscuelas.appendChild(itemCapa);
+    checkboxesEscuelas.push(checkbox);
   })
   .catch(error => console.error("Error al cargar Secundarias:", error));
 
@@ -2414,41 +2519,38 @@ fetch("archivos/vectores/cam.geojson")
       }
     });
 
-    // Agregar al panel al final
-    const listaCapasEquipamientos = document.querySelector(".lista-capas-equipamientos");
-    if (listaCapasEquipamientos) {
-      const itemCapa = document.createElement("li");
-      itemCapa.style.marginBottom = "10px";
-      itemCapa.style.fontSize = "13px";
+    // Agregar al panel
+    const itemCapa = document.createElement("li");
+    itemCapa.style.marginBottom = "10px";
+    itemCapa.style.fontSize = "13px";
 
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.checked = false;
-      checkbox.id = "checkboxCAMEducacion";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = false;
+    checkbox.id = "checkboxCAMEducacion";
 
-      checkbox.addEventListener("change", function() {
-        if (checkbox.checked) {
-          grupoCAM.addTo(map);
-        } else {
-          map.removeLayer(grupoCAM);
-        }
-      });
+    checkbox.addEventListener("change", function() {
+      if (checkbox.checked) {
+        grupoCAM.addTo(map);
+      } else {
+        map.removeLayer(grupoCAM);
+      }
+    });
 
-      const label = document.createElement("label");
-      label.htmlFor = "checkboxCAMEducacion";
-      label.style.marginLeft = "6px";
-      label.style.cursor = "pointer";
-      label.innerHTML = `
-        <span style="color: #555;">(${data.features.length})</span>
-        <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">&#129665;</span>
-        Centros de Atención Múltiple
-      `;
+    const label = document.createElement("label");
+    label.htmlFor = "checkboxCAMEducacion";
+    label.style.marginLeft = "6px";
+    label.style.cursor = "pointer";
+    label.innerHTML = `
+      <span style="color: #555;">(${data.features.length})</span>
+      <span style="font-size: 18px; margin-left: 5px; margin-right: 8px;">&#129665;</span>
+      Centros de Atención Múltiple
+    `;
 
-      itemCapa.appendChild(checkbox);
-      itemCapa.appendChild(label);
-      listaCapasEquipamientos.appendChild(itemCapa);
-      checkboxesEquipamientos.push(checkbox);
-    }
+    itemCapa.appendChild(checkbox);
+    itemCapa.appendChild(label);
+    listaEscuelas.appendChild(itemCapa);
+    checkboxesEscuelas.push(checkbox);
   })
   .catch(error => console.error("Error al cargar Centros de Atención Múltiple:", error));
 

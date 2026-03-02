@@ -40,13 +40,35 @@ if (typeof L === "undefined") {
                   // Crear la capa GeoJSON y asignar estilos
                   window.U_Habitacionales_layer = L.geoJSON(data, {
                       pointToLayer: (feature, latlng) => {
-                          // Icono de edificio de apartamentos para puntos
+                          // Obtener el número de casas o departamentos
+                          const numViviendas = feature.properties?.["NO. DE CASAS O DEPARTAMENTOS"] || 0;
+                          
+                          // Calcular el tamaño del icono basado en el número de viviendas
+                          // Tamaño base: 20px, escala hasta 50px
+                          let tamañoIcono;
+                          if (numViviendas <= 50) {
+                              tamañoIcono = 20;
+                          } else if (numViviendas <= 100) {
+                              tamañoIcono = 25;
+                          } else if (numViviendas <= 200) {
+                              tamañoIcono = 30;
+                          } else if (numViviendas <= 500) {
+                              tamañoIcono = 35;
+                          } else if (numViviendas <= 1000) {
+                              tamañoIcono = 40;
+                          } else if (numViviendas <= 2000) {
+                              tamañoIcono = 45;
+                          } else {
+                              tamañoIcono = 50;
+                          }
+                          
+                          // Icono de edificio de apartamentos con tamaño variable
                           const iconoEdificio = L.divIcon({
-                              html: '<div style="font-size: 26px; line-height: 1;">&#127970;</div>',
+                              html: `<div style="font-size: ${tamañoIcono}px; line-height: 1;">&#127970;</div>`,
                               className: 'emoji-icon',
-                              iconSize: [26, 26],
-                              iconAnchor: [13, 13],
-                              popupAnchor: [0, -13]
+                              iconSize: [tamañoIcono, tamañoIcono],
+                              iconAnchor: [tamañoIcono/2, tamañoIcono/2],
+                              popupAnchor: [0, -tamañoIcono/2]
                           });
                           return L.marker(latlng, { icon: iconoEdificio });
                       },

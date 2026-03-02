@@ -283,6 +283,12 @@
             if (this.checked) {
               if (window.capaColonias) {
                 map.addLayer(window.capaColonias);
+                // Actualizar etiquetas según el nivel de zoom actual
+                window.capaColonias.eachLayer(function(layer) {
+                  if (layer._updateLabel) {
+                    layer._updateLabel();
+                  }
+                });
               }
             } else {
               if (window.capaColonias) {

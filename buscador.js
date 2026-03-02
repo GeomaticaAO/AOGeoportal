@@ -84,8 +84,22 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        // Función para buscar palabras completas o palabras que empiezan con el filtro
+        const coincideConFiltro = (nombre, filtro) => {
+            const nombreLower = nombre.toLowerCase();
+            const filtroLower = filtro.toLowerCase();
+            
+            // Dividir el nombre en palabras individuales
+            const palabras = nombreLower.split(/[\s\-\/]+/);
+            
+            // Verificar si alguna palabra coincide exactamente o empieza con el filtro
+            return palabras.some(palabra => 
+                palabra === filtroLower || palabra.startsWith(filtroLower)
+            );
+        };
+
         const coincidencias = elementosBuscables
-            .filter(item => item.nombre.toLowerCase().includes(filtro.toLowerCase()))
+            .filter(item => coincideConFiltro(item.nombre, filtro))
             .slice(0, 10); // Aumentado el límite de sugerencias
 
         if (coincidencias.length === 0) {
